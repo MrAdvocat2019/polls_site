@@ -1,0 +1,16 @@
+a{
+    color:green;
+}
+ol {
+    list-style-type: upper-roman;
+}
+aside {
+    border:solid;
+    float:left;
+    width:200px;
+    height:500px;
+}
+main{
+margin-left: 220px;
+    display: block;
+}

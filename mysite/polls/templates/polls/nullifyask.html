@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nullyfying of {{question_id}}</title>
+  </head>
+  <body>
+    <form method="post">
+      {% csrf_token %}
+        <legend><h1>Do you want to nullify votes of question {{question.text}}</h1></legend>
+        <input type="submit" name="Yes" value="Yes!">
+    </form>
+  </body>
+</html>

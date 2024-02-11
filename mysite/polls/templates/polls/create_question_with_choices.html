@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post">
+    {% csrf_token %}
+    {{ question_form.as_p }}
+    <div id="choices">
+        {% for i in list %}
+        <p> <label for="choices{{i}}">Choice {{i}}</label><input type="text", id="choices{{i}}", name="choice_text_{{i}}" ></p>
+        {% endfor %}
+    </div>
+    <button type="button" id="add_choice">+</button>
+    <button type="button" id="remove_choice">-</button>
+    <input type="hidden" id="extra_choices" name="extra_choices" value="3">
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addButton = document.getElementById('add_choice');
+        const removeButton = document.getElementById('remove_choice');
+        const choicesDiv = document.getElementById('choices');
+        const extraChoicesInput = document.getElementById('extra_choices');
+
+        addButton.addEventListener('click', function () {
+            const numChoices = document.querySelectorAll('[id^="choices"]').length;
+            if (numChoices < 10){
+                extraChoicesInput.value = parseInt(extraChoicesInput.value) + 1;
+                const newChoiceField = document.createElement('div');
+                newChoiceField.innerHTML = `<p><label for="choices_${numChoices}-choice_text">Choice ${numChoices}</label> <input type="text" name="choice_text_${numChoices}" maxlength="200" required id="choices_${numChoices}-choice_text"></p>`;
+                choicesDiv.appendChild(newChoiceField);
+            }
+
+
+        });
+
+        removeButton.addEventListener('click', function () {
+            const numChoices = document.querySelectorAll('[id^="choices"]').length;
+            if (numChoices > 2) {
+                extraChoicesInput.value = parseInt(extraChoicesInput.value) - 1;
+                choicesDiv.removeChild(choicesDiv.lastElementChild);
+
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
