@@ -17,6 +17,7 @@ from django.shortcuts import render, get_object_or_404
 class IndexView(generic.ListView):
     template_name = "polls/index.html"
     context_object_name = "latest_question_list"
+    paginate_by = 2
     def get_queryset(self):
         return Question.objects.filter(productiondate__lte=timezone.now(),pk__in=[x.question.pk for x in Choice.objects.all()]).order_by("-productiondate")[:10]
 
@@ -25,19 +26,11 @@ class QuestionDetailView(generic.DetailView):
     template_name = "polls/details.html"
     def get_queryset(self):
         return Question.objects.filter(productiondate__lte=timezone.now(),pk__in=[x.question.pk for x in Choice.objects.all()])
+    
 class QuestionDelete(DeleteView):
     model = Question
     success_url = reverse_lazy('polls:index')
 
-def detail(request, question_id):
-    q=get_object_or_404(Question, pk=question_id)
-
-    if q.productiondate>timezone.now() :
-        raise Http404("Question is not published")
-    if q.choice_set.count() == 0:
-        raise Http404("No choices for this question")
-    context = {"question":q, "question_id":question_id}
-    return render(request, "polls/details.html", context)
 def results(request, question_id):
     q=get_object_or_404(Question, pk=question_id)
     if (q.productiondate > timezone.now()):
